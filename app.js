@@ -1,13 +1,14 @@
 const fs = require("fs");
 const express = require("express");
+const morgan = require("morgan");
 
 const app = express();
 
-// Midlle ware to convert data to json
+// 1) builtin Midlle ware to convert data to json
 
 app.use(express.json());
 
-// coustom middle ware
+// 2) coustom middle ware
 
 app.use((req, res, next) => {
   // this the code below will be accecable on every single route
@@ -17,6 +18,10 @@ app.use((req, res, next) => {
   console.log("Hello i am from MiddleWare :)");
   next();
 });
+
+// 3) Using 3rd person Packges , in this case this morgam packge use to tell us what request is coming
+
+app.use(morgan("dev"));
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
