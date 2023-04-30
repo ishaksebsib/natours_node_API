@@ -75,6 +75,27 @@ app.post("/api/v1/tours", (req, res) => {
   );
 });
 
+// UPDATE DATA
+
+app.patch("/api/v1/tours/:id", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message:
+      "updating data looks like this this is a demo of how api works letter on when we use real data we well see in detail",
+  });
+});
+
+// DELETE DATA
+
+app.delete("/api/v1/tours/:id", (req, res) => {
+  res.status(204).json({
+    status: "success",
+    data: null,
+    message:
+      "updating data looks like this this is a demo of how api works letter on when we use real data we well see in detail",
+  });
+});
+
 // START THE SERVER
 
 const port = 3000;
