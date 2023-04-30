@@ -11,13 +11,7 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-//  GET ALL ALL TOURS
-
-app.get("/", (req, res) => {
-  res.status(200).json("Hello from the server side!");
-});
-
-app.get("/api/v1/tours", (req, res) => {
+const getAllTours = (req, res) => {
   res.status(200).json({
     status: "success",
     results: tours.length,
@@ -25,14 +19,13 @@ app.get("/api/v1/tours", (req, res) => {
       tours,
     },
   });
-});
+};
 
-// GET TOUR BY ID
-
-app.get("/api/v1/tours/:id", (req, res) => {
+const getTourById = (req, res) => {
   // geting the id from url params and converting it to inteiger
 
   const id = req.params.id * 1;
+  const tour = tours.find((el) => el.id === id);
 
   // chake if the id is valid or exists in our data
 
@@ -45,18 +38,15 @@ app.get("/api/v1/tours/:id", (req, res) => {
 
   // find the tour by the id we get
 
-  const tour = tours.find((el) => el.id === id);
   res.status(200).json({
     status: "success",
     data: {
       tour,
     },
   });
-});
+};
 
-// CREATE NEW TOUR
-
-app.post("/api/v1/tours", (req, res) => {
+const createNewTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);
 
@@ -73,28 +63,40 @@ app.post("/api/v1/tours", (req, res) => {
       });
     }
   );
-});
+};
 
-// UPDATE DATA
-
-app.patch("/api/v1/tours/:id", (req, res) => {
+const updateTour = (req, res) => {
   res.status(200).json({
     status: "success",
     message:
       "updating data looks like this this is a demo of how api works letter on when we use real data we well see in detail",
   });
-});
+};
 
-// DELETE DATA
-
-app.delete("/api/v1/tours/:id", (req, res) => {
+const deleteTour = (req, res) => {
   res.status(204).json({
     status: "success",
     data: null,
     message:
       "updating data looks like this this is a demo of how api works letter on when we use real data we well see in detail",
   });
+};
+
+// HOME PAGE
+
+app.get("/", (req, res) => {
+  res.status(200).json("Hello from the server side!");
 });
+
+// Route
+
+app.route("/api/v1/tours").get(getAllTours).post(createNewTour);
+
+app
+  .route("/api/v1/tours/:id")
+  .get(getTourById)
+  .patch(updateTour)
+  .delete(deleteTour);
 
 // START THE SERVER
 
