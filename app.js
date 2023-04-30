@@ -7,6 +7,17 @@ const app = express();
 
 app.use(express.json());
 
+// coustom middle ware
+
+app.use((req, res, next) => {
+  // this the code below will be accecable on every single route
+
+  req.requestTime = new Date().toISOString();
+
+  console.log("Hello i am from MiddleWare :)");
+  next();
+});
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
