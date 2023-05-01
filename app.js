@@ -81,6 +81,8 @@ const createNewTour = (req, res) => {
   );
 };
 
+// tour funcitons
+
 const updateTour = (req, res) => {
   res.status(200).json({
     status: "success",
@@ -98,21 +100,68 @@ const deleteTour = (req, res) => {
   });
 };
 
+// user functions
+
+const getAllUsers = (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "comming soon",
+  });
+};
+
+const createUser = (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "comming soon",
+  });
+};
+
+const getUser = (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "comming soon",
+  });
+};
+
+const updateUser = (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "comming soon",
+  });
+};
+
+const deleteUser = (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "comming soon",
+  });
+};
+
 // HOME PAGE
 
 app.get("/", (req, res) => {
   res.status(200).json("Hello from the server side!");
 });
 
-// Route
+// Routes
 
-app.route("/api/v1/tours").get(getAllTours).post(createNewTour);
+const tourRouter = express.Router();
+app.use("/api/v1/tours", tourRouter);
 
-app
-  .route("/api/v1/tours/:id")
-  .get(getTourById)
-  .patch(updateTour)
-  .delete(deleteTour);
+tourRouter.route("/").get(getAllTours).post(createNewTour);
+
+tourRouter.route("/:id").get(getTourById).patch(updateTour).delete(deleteTour);
+
+const userRouter = express.Router();
+app.use("/api/v1/users", userRouter);
+
+userRouter.route("/api/v1/users").get(getAllUsers).post(createUser);
+
+userRouter
+  .route("/api/v1/users/:id")
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 // START THE SERVER
 
