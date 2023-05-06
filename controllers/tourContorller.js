@@ -5,7 +5,8 @@ const tours = JSON.parse(
 );
 
 exports.checkID = (req, res, next, val) => {
-  const tour = tours.find((el) => el.id === val);
+  const id = val * 1;
+  const tour = tours.find((el) => el.id === id);
   if (!tour) {
     return res.status(404).json({
       status: "fail",
@@ -42,7 +43,6 @@ exports.getAllTours = (req, res) => {
 
 exports.getTourById = (req, res) => {
   // geting the id from url params and converting it to inteiger
-
   const id = req.params.id * 1;
   const tour = tours.find((el) => el.id === id);
 
