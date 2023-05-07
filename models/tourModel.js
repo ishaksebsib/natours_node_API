@@ -1,22 +1,5 @@
 const mongoose = require("mongoose");
 
-// connect the db
-
-const DB = process.env.DATABASE.replace(
-  "<password>",
-  process.env.DATABASE_PASSWORD
-);
-
-mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useFindAndModify: true,
-    useUnifiedTopology: true,
-  })
-  .then((con) => {
-    console.log("DB Connected!!!");
-  });
-
 // BULDING THE SECHEMA
 
 const tourSchema = new mongoose.Schema({

@@ -1,6 +1,27 @@
 // SETUP ENV
 const dotenv = require("dotenv");
-dotenv.config({ path: "./config.env" });
+dotenv.config({
+  path: "./config.env",
+});
+
+const mongoose = require("mongoose");
+
+// CONNECT THE DATABASE
+
+const DB = process.env.DATABASE.replace(
+  "<password>",
+  process.env.DATABASE_PASSWORD
+);
+
+mongoose
+  .connect(DB, {
+    useNewUrlParser: true,
+    useFindAndModify: true,
+    useUnifiedTopology: true,
+  })
+  .then((con) => {
+    console.log("DB Connected!!!");
+  });
 
 // START THE SERVER
 const app = require("./app");
