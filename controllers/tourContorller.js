@@ -18,16 +18,21 @@ exports.getAllTours = async (req, res) => {
   }
 };
 
-exports.getTourById = (req, res) => {
-  // // geting the id from url params and converting it to inteiger
-  // const id = req.params.id * 1;
-  // const tour = tours.find((el) => el.id === id);
-  // res.status(200).json({
-  //   status: "success",
-  //   data: {
-  //     tour,
-  //   },
-  // });
+exports.getTourById = async (req, res) => {
+  try {
+    const tour = await Tour.findById(req.params.id);
+    res.status(200).json({
+      status: "success",
+      data: {
+        tour,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
 };
 
 exports.createNewTour = async (req, res) => {
