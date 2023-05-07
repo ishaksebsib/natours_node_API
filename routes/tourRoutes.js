@@ -13,7 +13,7 @@ const router = express.Router();
 
 // middle ware for url params only
 
-router.param("id", checkID);
+// router.param("id");
 
 router.route("/").get(getAllTours).post(checkBody, createNewTour);
 
