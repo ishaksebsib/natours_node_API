@@ -20,6 +20,43 @@ mongoose
     console.log("DB Connected!!!");
   });
 
+// BULDING THE SECHEMA
+
+const tourSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "A TORU MUST HAVE A NAME !!!"],
+    unique: true,
+  },
+  rating: {
+    type: Number,
+    default: 4.5,
+  },
+  price: {
+    type: Number,
+    required: [true, "A TOUR MUST HAVE A PRICE !!!"],
+  },
+});
+
+// CREATING OUR MODEL
+
+const Tour = mongoose.model("Tour", tourSchema);
+
+const testTour = new Tour({
+  name: "The Forest Hiker",
+  rating: 5,
+  price: 200,
+});
+
+testTour
+  .save()
+  .then((doc) => {
+    console.log(doc);
+  })
+  .catch((err) => {
+    console.log("ERROR :", err);
+  });
+
 // START THE SERVER
 const app = require("./app");
 const port = process.env.PORT || 3000;
