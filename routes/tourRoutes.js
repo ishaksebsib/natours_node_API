@@ -15,7 +15,7 @@ const router = express.Router();
 
 // router.param("id");
 
-router.route("/").get(getAllTours).post(checkBody, createNewTour);
+router.route("/").get(getAllTours).post(createNewTour);
 
 router.route("/:id").get(getTourById).patch(updateTour).delete(deleteTour);
 
