@@ -17,8 +17,20 @@ exports.getAllTours = async (req, res) => {
 
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`); // THIS CODE REPLACES THE STANDARD QUERY LIKE { duration: { gte: '4' } } THIS TO THE MONGOOSE FORMAT {"duration":{"$gte":"4"}}
 
-    const query = Tour.find(JSON.parse(queryStr));
+    let query = Tour.find(JSON.parse(queryStr)); // prepare the query string
 
+    // 3) SORTING
+
+    //   example http://localhost:8080/api/v1/tours/?sort=-price OR  http://localhost:8080/api/v1/tours/?sort=price
+
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(",").join(" ");
+      query = query.sort(sortBy);
+    } else {
+      //   -- IF USER DO NOT APPLY THE SORT ON URL  THIS EALSE FUNCTION WILL BE APPLYED SO THAT IT RETURN THE DATA BY LIST CREATED
+
+      query = query.sort("-createdAt");
+    }
     // EXECUTE QUERY
 
     const tours = await query;
