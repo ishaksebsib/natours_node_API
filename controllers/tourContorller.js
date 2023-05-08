@@ -5,10 +5,19 @@ exports.getAllTours = async (req, res) => {
     // BUILD QUERY
 
     const queryObj = { ...req.query };
+
+    // 1) FILITERING
+
     const excludedFields = ["page", "sort", "list", "fields"];
     excludedFields.forEach((el) => delete queryObj[el]);
 
-    const query = Tour.find(queryObj);
+    // 2) ADVANCED FILLITERING
+
+    let queryStr = JSON.stringify(queryObj);
+
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`); // THIS CODE REPLACES THE STANDARD QUERY LIKE { duration: { gte: '4' } } THIS TO THE MONGOOSE FORMAT {"duration":{"$gte":"4"}}
+
+    const query = Tour.find(JSON.parse(queryStr));
 
     // EXECUTE QUERY
 
