@@ -1,48 +1,27 @@
 const Tour = require("../models/tourModel");
+const APIFeatures = require("../utils/apiFeatures");
+
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = "5";
+  req.query.sort = "-ratingAverage,price";
+  req.query.fields = "name,price,ratingsAverage,summary,difficulty";
+  next();
+};
 
 exports.getAllTours = async (req, res) => {
   try {
     // BUILD QUERY
 
-    const queryObj = { ...req.query };
+    const features = new APIFeatures(Tour.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
 
-    // 1) FILITERING
-
-    const excludedFields = ["page", "sort", "list", "fields"];
-    excludedFields.forEach((el) => delete queryObj[el]);
-
-    // 2) ADVANCED FILLITERING
-
-    let queryStr = JSON.stringify(queryObj);
-
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`); // THIS CODE REPLACES THE STANDARD QUERY LIKE { duration: { gte: '4' } } THIS TO THE MONGOOSE FORMAT {"duration":{"$gte":"4"}}
-
-    let query = Tour.find(JSON.parse(queryStr)); // prepare the query string
-
-    // 3) SORTING
-
-    //   example http://localhost:8080/api/v1/tours/?sort=-price OR  http://localhost:8080/api/v1/tours/?sort=price
-
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(",").join(" ");
-      query = query.sort(sortBy);
-    } else {
-      //   -- IF USER DO NOT APPLY THE SORT ON URL  THIS EALSE FUNCTION WILL BE APPLYED SO THAT IT RETURN THE DATA BY LIST CREATED
-
-      query = query.sort("-createdAt");
-    }
-
-    // 4) FIELD LIMITING
-
-    if (req.query.fields) {
-      const fields = req.query.fields.split(",").join(" ");
-      query = query.select(fields);
-    } else {
-      query = query.select("-__v");
-    }
     // EXECUTE QUERY
 
-    const tours = await query;
+    const tours = await features.query;
+
     res.status(200).json({
       status: "success",
       results: tours.length,
